@@ -1,0 +1,8 @@
+opencv-python
+numpy
+streamlit
+vosk
+reportlab
+deepface
+matplotlib
+sounddevice
