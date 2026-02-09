@@ -23,17 +23,29 @@ Python • OpenCV • Vosk Speech Recognition • NLP • Streamlit
 📂 Project Structure
 
 Interview-Intelligence-System
+
 │
+
 ├── app.py (Streamlit application)
+
 ├── camera_test.py (Webcam test)
+
 ├── requirements.txt (Dependencies)
+
 │
+
 ├── modules/
+
 │ ├── video_analysis.py
+
 │ ├── audio_analysis.py
+
 │ ├── speech_analysis.py
+
 │ ├── scoring.py
+
 │ └── report_generator.py
+
 
 ⚙️ Setup Instructions
 1️⃣ Clone Repository
