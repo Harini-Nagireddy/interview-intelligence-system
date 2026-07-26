@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Interview Intelligence System</title>
+<style>
+  :root {
+    --primary: #4F46E5;
+    --primary-dark: #3730A3;
+    --secondary: #7C3AED;
+    --accent: #06B6D4;
+    --success: #059669;
+    --bg: #0F0E17;
+    --bg2: #1A1930;
+    --bg3: #242240;
+    --card: #1E1C3A;
+    --border: rgba(79,70,229,0.25);
+    --text: #E8E6F0;
+    --text-muted: #9CA3AF;
+    --glow: 0 0 40px rgba(79,70,229,0.3);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .bg-grid {
+    position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(79,70,229,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,70,229,0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+  }
+  .hero {
+    text-align: center;
+    padding: 80px 24px 40px;
+    position: relative;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(79,70,229,0.15);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: #A5B4FC;
+    margin-bottom: 24px;
+  }
+  .dot { width:8px; height:8px; border-radius:50%; background:#06B6D4; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #fff 0%, #A5B4FC 50%, #7C3AED 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero p {
+    font-size: 18px; color: var(--text-muted);
+    max-width: 560px; margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+  .features-row {
+    display: flex; justify-content: center; gap: 16px;
+    flex-wrap: wrap; margin-bottom: 60px;
+  }
+  .feature-chip {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px; color: #C4B5FD;
+  }
+  .setup-container {
+    max-width: 680px; margin: 0 auto; padding: 0 24px 80px;
+  }
+  .setup-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: var(--glow);
+  }
+  .setup-card h2 {
+    font-size: 22px; font-weight: 700;
+    margin-bottom: 6px; color: #fff;
+  }
+  .setup-card p { color: var(--text-muted); font-size: 14px; margin-bottom: 28px; }
+  .form-group { margin-bottom: 20px; }
+  label {
+    display: block; font-size: 13px; font-weight: 600;
+    color: #A5B4FC; margin-bottom: 8px; letter-spacing: 0.5px;
+  }
+  input[type="text"] {
+    width: 100%; padding: 13px 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  input[type="text"]:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79,70,229,0.15);
+  }
+  .role-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+  }
+  .role-btn {
+    padding: 11px 14px;
+    background: var(--bg2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-muted);
+    font-size: 13px; font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .role-btn:hover { border-color: var(--primary); color: #A5B4FC; }
+  .role-btn.selected {
+    background: rgba(79,70,229,0.2);
+    border-color: var(--primary);
+    color: #fff;
+    box-shadow: 0 0 16px rgba(79,70,229,0.3);
+  }
+  .config-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;
+  }
+  .config-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .config-item input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary); }
+  .config-item span { font-size: 13px; color: var(--text-muted); }
+  .btn-start {
+    width: 100%; padding: 16px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border: none; border-radius: 12px;
+    color: #fff; font-size: 16px; font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 24px rgba(79,70,229,0.4);
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .btn-start:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(79,70,229,0.5); }
+  .btn-start:active { transform: translateY(0); }
+  .divider { height: 1px; background: var(--border); margin: 24px 0; }
+  .stats-row {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 40px;
+  }
+  .stat-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px; text-align: center;
+  }
+  .stat-card .num { font-size: 28px; font-weight: 800; color: #A5B4FC; }
+  .stat-card .lbl { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<div class="hero">
+  <div class="hero-badge">
+    <div class="dot"></div>
+    AI-Powered Interview Simulator
+  </div>
+  <h1>Interview Intelligence<br/>System</h1>
+  <p>Practice mock interviews with real-time AI feedback. Get scored on confidence, communication, fluency, and content quality.</p>
+  <div class="features-row">
+    <div class="feature-chip">🎥 Video Analysis</div>
+    <div class="feature-chip">🎙️ Audio Processing</div>
+    <div class="feature-chip">🧠 NLP Analysis</div>
+    <div class="feature-chip">📊 Auto Scoring</div>
+    <div class="feature-chip">📄 PDF Report</div>
+  </div>
+</div>
+
+<div class="setup-container">
+  <div class="setup-card">
+    <h2>Setup Your Interview</h2>
+    <p>Configure your mock interview session below</p>
+
+    <div class="form-group">
+      <label>YOUR NAME</label>
+      <input type="text" id="candidateName" placeholder="Enter your full name" value=""/>
+    </div>
+
+    <div class="form-group">
+      <label>SELECT ROLE</label>
+      <div class="role-grid" id="roleGrid">
+        {% for role in roles %}
+        <div class="role-btn" onclick="selectRole(this, '{{ role }}')" data-role="{{ role }}">{{ role }}</div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="config-row">
+      <div class="config-item">
+        <input type="checkbox" id="enableVideo" checked/>
+        <span>Enable Video Recording</span>
+      </div>
+      <div class="config-item">
+        <input type="checkbox" id="enableAudio" checked/>
+        <span>Enable Audio Recording</span>
+      </div>
+      <div class="config-item">
+        <input type="checkbox" id="showTimer" checked/>
+        <span>Show Question Timer</span>
+      </div>
+      <div class="config-item">
+        <input type="checkbox" id="autoAdvance" checked/>
+        <span>Auto-advance Questions</span>
+      </div>
+    </div>
+
+    <button class="btn-start" onclick="startInterview()">
+      🚀 Start Mock Interview
+    </button>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="num">5</div>
+      <div class="lbl">Questions Per Session</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">90s</div>
+      <div class="lbl">Time Per Question</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">5</div>
+      <div class="lbl">Performance Metrics</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let selectedRole = '';
+
+  function selectRole(el, role) {
+    document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedRole = role;
+  }
+
+  function startInterview() {
+    const name = document.getElementById('candidateName').value.trim();
+    if (!name) { alert('Please enter your name!'); return; }
+    if (!selectedRole) { alert('Please select a role!'); return; }
+    const params = new URLSearchParams({ name, role: selectedRole });
+    window.location.href = `/interview?${params}`;
+  }
+
+  // Auto-select first role
+  document.addEventListener('DOMContentLoaded', () => {
+    const first = document.querySelector('.role-btn');
+    if (first) { first.click(); }
+  });
+</script>
+</body>
+</html>
