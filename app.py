@@ -14,8 +14,11 @@ from modules.report_generator import generate_pdf_report
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-UPLOAD_FOLDER = "uploads"
-REPORTS_FOLDER = "reports"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
+REPORTS_FOLDER = os.path.join(BASE_DIR, "reports")
+
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(REPORTS_FOLDER, exist_ok=True)
 
